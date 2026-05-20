@@ -22,7 +22,7 @@ function ShlokaCard({
       style={{
         backgroundColor: "#ffffff",
         width: "100%",
-        maxWidth: "420px",
+        maxWidth: "320px",
         aspectRatio: "1 / 1",
         margin: "0 auto 24px",
         position: "relative",
