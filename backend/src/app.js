@@ -1,9 +1,11 @@
 const express = require("express");
 const routes = require("./routes");
+const cors = require("cors");
 
 const app = express();
 
 // Global middleware
+app.use(cors({ origin: "http://localhost:5173" })); 
 app.use(express.json());
 
 // Health check

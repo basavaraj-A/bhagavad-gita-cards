@@ -1,6 +1,8 @@
 const routes = {
   Home: "/",
-  WisdomWall: "/wisdomwall",
+  philosophergrid: "/philosophergrid",
+
 };
 
 export default routes;
+

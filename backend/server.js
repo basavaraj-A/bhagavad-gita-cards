@@ -4,6 +4,7 @@ const connectDB = require("./src/config/db");
 
 const PORT = process.env.PORT || 5000;
 
+
 // Connect to database FIRST
 connectDB();
 
