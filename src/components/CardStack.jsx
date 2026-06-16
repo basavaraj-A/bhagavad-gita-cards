@@ -61,8 +61,15 @@ function CardStack({ shlokas, language, favorites, onToggleFavorite }) {
   return (
     <div
       style={{ userSelect: "none", WebkitUserSelect: "none" }}
-      onMouseDown={(e) => handleStart(e.clientX)}
-      onMouseMove={(e) => handleMove(e.clientX)}
+      draggable="false" // 👈 add
+      onMouseDown={(e) => {
+        e.preventDefault(); // 👈 add
+        handleStart(e.clientX);
+      }}
+      onMouseMove={(e) => {
+        e.preventDefault(); // 👈 add
+        handleMove(e.clientX);
+      }}
       onMouseUp={handleEnd}
       onMouseLeave={handleEnd}
       onTouchStart={(e) => handleStart(e.touches[0].clientX)}
@@ -94,17 +101,13 @@ function CardStack({ shlokas, language, favorites, onToggleFavorite }) {
                   ? `translateX(${dragX}px) rotate(${dragX * 0.05}deg)`
                   : `scale(${1 - offset * 0.04})`,
 
-                transition: isDragging
-                  ? "none"
-                  : "transform 0.3s ease-out",
+                transition: isDragging ? "none" : "transform 0.3s ease-out",
               }}
             >
               <ShlokaCard
                 shloka={shlokas[index]}
                 language={language}
-                isFavorite={favorites.some(
-                  (s) => s._id === shlokas[index]._id
-                )}
+                isFavorite={favorites.some((s) => s._id === shlokas[index]._id)}
                 onToggleFavorite={onToggleFavorite}
               />
             </div>

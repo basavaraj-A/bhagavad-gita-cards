@@ -35,6 +35,7 @@ function ShlokaCard({
           <img
             src={shloka.image}
             alt={shloka.philosopher}
+            draggable="false" 
             style={{
               position: "absolute",
               inset: 0,
@@ -63,6 +64,7 @@ function ShlokaCard({
             <img
               src={shloka.image}
               alt={shloka.philosopher}
+              draggable="false"
               style={{
                 width: "120px",
                 height: "120px",
