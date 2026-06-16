@@ -6,7 +6,8 @@ const Shloka = require("../models/shloka.model");
 const Quote = require("../models/quote.model");
 
 // ─── Auth Routes (public) ───
-router.post("/register", registerAdmin);
+// router.post("/register", registerAdmin);
+
 router.post("/login", loginAdmin);
 
 // ─── Shloka Routes (protected) ───

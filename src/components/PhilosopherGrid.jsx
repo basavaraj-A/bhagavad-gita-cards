@@ -265,6 +265,8 @@ export default function PhilosopherGrid() {
   const handlePhilosopherClick = (name) => {
     if (name === "Krishna") {
       navigate("/");
+    } else {
+      navigate(`/philosopher/${name.toLowerCase().replace(" ", "-")}`);
     }
   };
 
