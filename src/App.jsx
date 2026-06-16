@@ -6,6 +6,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdSlot from "./layout/AdSlot";
 import CardStack from "./components/CardStack";
 import PageLayout from "./layout/PageLayout";
+const images = import.meta.glob("./assets/philosophers/*.{jpg,png}", {
+  eager: true,
+}); // 👈 add
 
 function App() {
   const { name } = useParams();
@@ -19,6 +22,13 @@ function App() {
     : "Krishna";
 
   const isPhilosopher = !!name;
+
+  // 👇 get philosopher image
+  const philosopherImage = isPhilosopher
+    ? images[
+        `./assets/philosophers/${displayName.toLowerCase().replace(" ", "")}.png`
+      ]?.default
+    : null;
 
   const [searchValue, setSearchValue] = useState("");
   const [language, setLanguage] = useState(() => {
@@ -65,10 +75,27 @@ function App() {
       try {
         if (isPhilosopher) {
           const data = await fetchQuotesByPhilosopher(displayName);
-          setCardsData(data);
+
+          // 👇 add image card as first card
+          const imageCard = {
+            _id: "philosopher-image-card",
+            isImageCard: true,
+            philosopher: displayName,
+            image:
+              images[
+                `./assets/philosophers/${displayName.toLowerCase().replace(" ", "")}.png`
+              ]?.default,
+          };
+          setCardsData([imageCard, ...data]);
         } else {
           const data = await fetchAllShlokas();
-          setCardsData(data);
+          const krishnaImageCard = {
+            _id: "krishna-image-card",
+            isImageCard: true,
+            philosopher: "Krishna",
+            image: images["./assets/philosophers/krishna.png"]?.default,
+          };
+          setCardsData([krishnaImageCard, ...data]);
         }
       } catch (error) {
         console.error("Failed to load data", error);

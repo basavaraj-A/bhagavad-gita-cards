@@ -9,11 +9,123 @@ function ShlokaCard({
   onToggleFavorite,
 }) {
   const [hovered, setHovered] = useState(false);
-  const meaning = shloka.translations[language];
+
+  // 👇 render image card for philosopher
+  if (shloka.isImageCard) {
+    return (
+      <div
+        style={{
+          backgroundColor: "#ffffff",
+          width: "100%",
+          maxWidth: "320px",
+          aspectRatio: "1 / 1",
+          margin: "0 auto 24px",
+          position: "relative",
+          borderRadius: "20px",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.6)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+        }}
+      >
+        {/* Background blur image */}
+        {shloka.image && (
+          <img
+            src={shloka.image}
+            alt={shloka.philosopher}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "blur(8px) brightness(0.4)",
+              transform: "scale(1.1)",
+            }}
+          />
+        )}
+
+        {/* Foreground content */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "16px",
+          }}
+        >
+          {/* Philosopher image */}
+          {shloka.image ? (
+            <img
+              src={shloka.image}
+              alt={shloka.philosopher}
+              style={{
+                width: "120px",
+                height: "120px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                border: "3px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: "120px",
+                height: "120px",
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #833AB4, #E1306C, #FD1D1D)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "40px",
+                color: "#fff",
+              }}
+            >
+              {shloka.philosopher?.charAt(0)}
+            </div>
+          )}
+
+          {/* Philosopher name */}
+          <h2
+            style={{
+              color: "#ffffff",
+              fontSize: "24px",
+              fontWeight: "700",
+              margin: 0,
+              textAlign: "center",
+              textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+              letterSpacing: "0.5px",
+            }}
+          >
+            {shloka.philosopher}
+          </h2>
+
+          {/* Swipe hint */}
+          <p
+            style={{
+              color: "rgba(255,255,255,0.6)",
+              fontSize: "12px",
+              margin: 0,
+            }}
+          >
+            Swipe to read quotes →
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // 👇 normal shloka/quote card below
+  const meaning = shloka.translations?.[language] || shloka.quote || "";
 
   const pronounceShloka = () => {
-    const utterance = new SpeechSynthesisUtterance(shloka.sanskrit);
-    utterance.lang = "sa-IN";
+    const utterance = new SpeechSynthesisUtterance(shloka.sanskrit || shloka.quote);
+    utterance.lang = shloka.sanskrit ? "sa-IN" : "en-US";
     window.speechSynthesis.speak(utterance);
   };
 
@@ -36,7 +148,7 @@ function ShlokaCard({
         justifyContent: "center",
       }}
     >
-      {/* 🔹 Shloka Number */}
+      {/* 🔹 Shloka Number or Philosopher */}
       <div
         style={{
           position: "absolute",
@@ -48,7 +160,9 @@ function ShlokaCard({
           letterSpacing: "0.4px",
         }}
       >
-        {shloka.chapter}.{shloka.verse}
+        {shloka.chapter && shloka.verse
+          ? `${shloka.chapter}.${shloka.verse}`
+          : shloka.philosopher || ""}
       </div>
 
       {/* Top-right actions */}
@@ -96,49 +210,85 @@ function ShlokaCard({
           gap: "20px",
         }}
       >
-        {/* Sanskrit */}
-        <div style={{ textAlign: "center" }}>
+        {/* Sanskrit text — only for shlokas */}
+        {shloka.sanskrit && (
+          <div style={{ textAlign: "center" }}>
+            <p
+              style={{
+                fontSize: "20px",
+                lineHeight: "1.8",
+                fontWeight: "600",
+                color: "#111111",
+                marginBottom: "10px",
+              }}
+            >
+              {shloka.sanskrit}
+            </p>
+
+            <button
+              onClick={pronounceShloka}
+              style={{
+                backgroundColor: "rgba(0,0,0,0.05)",
+                border: "none",
+                borderRadius: "999px",
+                padding: "6px 10px",
+                cursor: "pointer",
+                fontSize: "16px",
+                opacity: 0.8,
+              }}
+            >
+              🔊
+            </button>
+          </div>
+        )}
+
+        {/* Quote text — only for philosopher quotes */}
+        {!shloka.sanskrit && shloka.quote && (
+          <div style={{ textAlign: "center" }}>
+            <p
+              style={{
+                fontSize: "18px",
+                lineHeight: "1.8",
+                fontWeight: "600",
+                color: "#111111",
+                marginBottom: "10px",
+                fontStyle: "italic",
+              }}
+            >
+              "{shloka.quote}"
+            </p>
+            <button
+              onClick={pronounceShloka}
+              style={{
+                backgroundColor: "rgba(0,0,0,0.05)",
+                border: "none",
+                borderRadius: "999px",
+                padding: "6px 10px",
+                cursor: "pointer",
+                fontSize: "16px",
+                opacity: 0.8,
+              }}
+            >
+              🔊
+            </button>
+          </div>
+        )}
+
+        {/* Meaning / Translation */}
+        {meaning && (
           <p
             style={{
-              fontSize: "20px",
-              lineHeight: "1.8",
-              fontWeight: "600",
-              color: "#111111",
-              marginBottom: "10px",
+              fontSize: "15px",
+              lineHeight: "1.75",
+              color: "#444444",
+              textAlign: "center",
+              maxWidth: "90%",
+              margin: "0 auto",
             }}
           >
-            {shloka.sanskrit}
+            {meaning}
           </p>
-
-          <button
-            onClick={pronounceShloka}
-            style={{
-              backgroundColor: "rgba(0,0,0,0.05)",
-              border: "none",
-              borderRadius: "999px",
-              padding: "6px 10px",
-              cursor: "pointer",
-              fontSize: "16px",
-              opacity: 0.8,
-            }}
-          >
-            🔊
-          </button>
-        </div>
-
-        {/* Meaning */}
-        <p
-          style={{
-            fontSize: "15px",
-            lineHeight: "1.75",
-            color: "#444444",
-            textAlign: "center",
-            maxWidth: "90%",
-            margin: "0 auto",
-          }}
-        >
-          {meaning}
-        </p>
+        )}
       </div>
 
       {/* Center dot */}
