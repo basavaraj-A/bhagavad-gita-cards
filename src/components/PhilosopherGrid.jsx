@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useScreenSize } from "../hooks/useScreenSize"; // 👈 add
 
 const images = import.meta.glob("../assets/philosophers/*.{jpg,png}", {
   eager: true,
@@ -136,6 +137,9 @@ const philosophers = [
 const PhilosopherCoin = ({ philosopher, onClick }) => {
   const [hovered, setHovered] = useState(false);
   const coinRef = useRef(null);
+  const { isMobile } = useScreenSize();
+
+  const coinSize = isMobile ? 46 : 58;
 
   return (
     <div style={{ position: "relative", width: 58, height: 58, flexShrink: 0 }}>
@@ -260,6 +264,7 @@ const PhilosopherCoin = ({ philosopher, onClick }) => {
 
 export default function PhilosopherGrid() {
   const navigate = useNavigate();
+  const { isMobile } = useScreenSize();
 
   // 👇 clean single function, no nesting, no old blocks
   const handlePhilosopherClick = (name) => {
@@ -275,9 +280,9 @@ export default function PhilosopherGrid() {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        columnGap: 12,
-        rowGap: 12,
-        padding: 30,
+        columnGap: isMobile ? 8 : 12,
+        rowGap: isMobile ? 8 : 12,
+        padding: isMobile ? 16 : 30,
         justifyContent: "center",
         alignItems: "flex-start",
         alignContent: "flex-start",

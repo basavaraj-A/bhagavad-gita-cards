@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import ShlokaCard from "./ShlokaCard";
+import { useScreenSize } from "../hooks/useScreenSize";  // 👈 add
 
 function CardStack({ shlokas, language, favorites, onToggleFavorite }) {
+  const { isMobile } = useScreenSize();
   const [activeIndex, setActiveIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -76,7 +78,7 @@ function CardStack({ shlokas, language, favorites, onToggleFavorite }) {
       onTouchMove={(e) => handleMove(e.touches[0].clientX)}
       onTouchEnd={handleEnd}
     >
-      <div style={{ position: "relative", height: "450px" }}>
+     <div style={{ position: "relative", height: isMobile ? "380px" : "450px" }}>  {/* 👈 update */}
         {[0, 1, 2].map((offset) => {
           const index = activeIndex + offset;
           if (index >= shlokas.length) return null;

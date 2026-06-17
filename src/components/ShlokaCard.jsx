@@ -1,6 +1,7 @@
 import favoritesIcon from "../assets/icons/heart.jpg";
 import likeIcon from "../assets/icons/like.jpg";
 import { useState } from "react";
+import { useScreenSize } from "../hooks/useScreenSize"; // 👈 add
 
 function ShlokaCard({
   shloka,
@@ -9,6 +10,7 @@ function ShlokaCard({
   onToggleFavorite,
 }) {
   const [hovered, setHovered] = useState(false);
+  const { isMobile } = useScreenSize(); // 👈 add
 
   // 👇 render image card for philosopher
   if (shloka.isImageCard) {
@@ -17,12 +19,14 @@ function ShlokaCard({
         style={{
           backgroundColor: "#ffffff",
           width: "100%",
-          maxWidth: "320px",
+          maxWidth: isMobile ? "260px" : "320px",
+          padding: isMobile ? "16px" : "26px",
           aspectRatio: "1 / 1",
           margin: "0 auto 24px",
           position: "relative",
           borderRadius: "20px",
-          boxShadow: "0 20px 40px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.6)",
+          boxShadow:
+            "0 20px 40px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.6)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -35,7 +39,7 @@ function ShlokaCard({
           <img
             src={shloka.image}
             alt={shloka.philosopher}
-            draggable="false" 
+            draggable="false"
             style={{
               position: "absolute",
               inset: 0,
@@ -66,8 +70,8 @@ function ShlokaCard({
               alt={shloka.philosopher}
               draggable="false"
               style={{
-                width: "120px",
-                height: "120px",
+                width: isMobile ? "90px" : "120px", // 👈 here
+                height: isMobile ? "90px" : "120px",
                 borderRadius: "50%",
                 objectFit: "cover",
                 border: "3px solid rgba(255,255,255,0.8)",
@@ -80,7 +84,8 @@ function ShlokaCard({
                 width: "120px",
                 height: "120px",
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #833AB4, #E1306C, #FD1D1D)",
+                background:
+                  "linear-gradient(135deg, #833AB4, #E1306C, #FD1D1D)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -96,7 +101,7 @@ function ShlokaCard({
           <h2
             style={{
               color: "#ffffff",
-              fontSize: "24px",
+              fontSize: isMobile ? "20px" : "24px",
               fontWeight: "700",
               margin: 0,
               textAlign: "center",
@@ -126,7 +131,9 @@ function ShlokaCard({
   const meaning = shloka.translations?.[language] || shloka.quote || "";
 
   const pronounceShloka = () => {
-    const utterance = new SpeechSynthesisUtterance(shloka.sanskrit || shloka.quote);
+    const utterance = new SpeechSynthesisUtterance(
+      shloka.sanskrit || shloka.quote,
+    );
     utterance.lang = shloka.sanskrit ? "sa-IN" : "en-US";
     window.speechSynthesis.speak(utterance);
   };
@@ -217,7 +224,7 @@ function ShlokaCard({
           <div style={{ textAlign: "center" }}>
             <p
               style={{
-                fontSize: "20px",
+                fontSize: isMobile ? "16px" : "20px",
                 lineHeight: "1.8",
                 fontWeight: "600",
                 color: "#111111",
@@ -280,7 +287,7 @@ function ShlokaCard({
         {meaning && (
           <p
             style={{
-              fontSize: "15px",
+              fontSize: isMobile ? "13px" : "15px",
               lineHeight: "1.75",
               color: "#444444",
               textAlign: "center",
