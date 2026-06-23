@@ -1,7 +1,13 @@
 import favoritesIcon from "../assets/icons/heart.jpg";
 import likeIcon from "../assets/icons/like.jpg";
 import { useState } from "react";
-import { useScreenSize } from "../hooks/useScreenSize"; // 👈 add
+import { useScreenSize } from "../hooks/useScreenSize";
+
+// 👇 shared dimensions for both card types
+const CARD_MAX_WIDTH_MOBILE = "260px";
+const CARD_MAX_WIDTH_DESKTOP = "320px";
+const CARD_PADDING_MOBILE = "16px";
+const CARD_PADDING_DESKTOP = "26px";
 
 function ShlokaCard({
   shloka,
@@ -10,7 +16,10 @@ function ShlokaCard({
   onToggleFavorite,
 }) {
   const [hovered, setHovered] = useState(false);
-  const { isMobile } = useScreenSize(); // 👈 add
+  const { isMobile } = useScreenSize();
+
+  const cardMaxWidth = isMobile ? CARD_MAX_WIDTH_MOBILE : CARD_MAX_WIDTH_DESKTOP;
+  const cardPadding = isMobile ? CARD_PADDING_MOBILE : CARD_PADDING_DESKTOP;
 
   // 👇 render image card for philosopher
   if (shloka.isImageCard) {
@@ -19,12 +28,13 @@ function ShlokaCard({
         style={{
           backgroundColor: "#ffffff",
           width: "100%",
-          maxWidth: isMobile ? "260px" : "320px",
-          padding: isMobile ? "16px" : "26px",
+          maxWidth: cardMaxWidth,        // 👈 shared
+          padding: cardPadding,           // 👈 shared
           aspectRatio: "1 / 1",
           margin: "0 auto 24px",
           position: "relative",
           borderRadius: "20px",
+          boxSizing: "border-box",        // 👈 add
           boxShadow:
             "0 20px 40px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.6)",
           display: "flex",
@@ -70,7 +80,7 @@ function ShlokaCard({
               alt={shloka.philosopher}
               draggable="false"
               style={{
-                width: isMobile ? "90px" : "120px", // 👈 here
+                width: isMobile ? "90px" : "120px",
                 height: isMobile ? "90px" : "120px",
                 borderRadius: "50%",
                 objectFit: "cover",
@@ -81,15 +91,15 @@ function ShlokaCard({
           ) : (
             <div
               style={{
-                width: "120px",
-                height: "120px",
+                width: isMobile ? "90px" : "120px",
+                height: isMobile ? "90px" : "120px",
                 borderRadius: "50%",
                 background:
                   "linear-gradient(135deg, #833AB4, #E1306C, #FD1D1D)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "40px",
+                fontSize: isMobile ? "32px" : "40px",
                 color: "#fff",
               }}
             >
@@ -143,12 +153,13 @@ function ShlokaCard({
       style={{
         backgroundColor: "#ffffff",
         width: "100%",
-        maxWidth: "320px",
+        maxWidth: cardMaxWidth,          // 👈 shared (was hardcoded "320px")
+        padding: cardPadding,             // 👈 shared (was hardcoded "26px")
         aspectRatio: "1 / 1",
         margin: "0 auto 24px",
         position: "relative",
-        padding: "26px",
         borderRadius: "20px",
+        boxSizing: "border-box",          // 👈 add
         boxShadow:
           "0 20px 40px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.6)",
         transition: "all 0.3s ease",
@@ -256,7 +267,7 @@ function ShlokaCard({
           <div style={{ textAlign: "center" }}>
             <p
               style={{
-                fontSize: "18px",
+                fontSize: isMobile ? "15px" : "18px",
                 lineHeight: "1.8",
                 fontWeight: "600",
                 color: "#111111",

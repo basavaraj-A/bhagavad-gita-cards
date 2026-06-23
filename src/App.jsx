@@ -184,13 +184,20 @@ function App() {
             marginBottom: "20px",
           }}
         >
-          {/* Logo — always visible */}
+          
+          {/* Logo — always visible, clickable */}
           <img
             src={logo}
             alt="Logo"
-            style={{ width: "60px", height: "60px", objectFit: "contain" }}
+            onClick={() => navigate("/philosophergrid")}
+            style={{
+              width: "60px",
+              height: "60px",
+              objectFit: "contain",
+              cursor: "pointer", // 👈 add
+            }}
           />
-
+          
           <div>
             {/* Cards name — always visible */}
             <h1 style={{ fontSize: "22px", fontWeight: "600", margin: 0 }}>
@@ -221,7 +228,6 @@ function App() {
               </span>
             </div>
           </div>
-
           {/* Philosopher name + Back button — only on philosopher pages */}
           {isPhilosopher && (
             <div
@@ -422,4 +428,3 @@ function App() {
 }
 
 export default App;
-
